@@ -24,16 +24,8 @@ class SmushingRulesToApply {
     return horizontalLayout;
   }
 
-  SmushingRule.Layout getVerticalLayout() {
-    return verticalLayout;
-  }
-
   List<SmushingRule> getHorizontalSmushingRules() {
     return horizontalSmushingRules;
-  }
-
-  List<SmushingRule> getVerticalSmushingRules() {
-    return verticalSmushingRules;
   }
 
   boolean smushesHorizontal(char char1, char char2, char hardblank){
