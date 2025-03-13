@@ -1,6 +1,5 @@
 package me.koendev.comedytui
 
-import me.koendev.utils.times
 import java.awt.Color
 
 const val HOR = '═'
@@ -30,20 +29,23 @@ class TUI {
         var str = (if (foreColor != null) setForegroundColor(foreColor) else "") +
                   (if (backColor != null) setForegroundColor(backColor) else "") +
                   moveCursor(x, y) +
-                  CUL + HOR*(w-2) + CUR
+                  CUL + HOR.toString().repeat(w-2) + CUR
 
         for (line in y + 1..<y + h - 1) {
             str += moveCursor(x, line) + VER +
                     moveCursor(x + w - 1, line) + VER
         }
 
-        str += moveCursor(x, y + h - 1) + CDL + HOR*(w-2) + CDR
+        str += moveCursor(x, y + h - 1) + CDL + HOR.toString().repeat(w-2) + CDR
 
         print(str + resetColor())
     }
 
-    fun write(x: Int, y: Int, str: String) {
-        var output = moveCursor(x, y)// + setBackgroundColor(117)
+    fun write(x: Int, y: Int, str: String, foreColor: Color? = null, backColor: Color? = null) {
+        var output =
+                (if (foreColor != null) setForegroundColor(foreColor) else "") +
+                (if (backColor != null) setForegroundColor(backColor) else "") +
+                moveCursor(x, y)
 
                 for ((i, line) in str.split('\n').withIndex()) {
             output += line + moveCursor(x, y+i+1)

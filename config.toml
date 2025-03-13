@@ -1,24 +1,41 @@
+breakIndex = 2
+
 [mc]
-name = "Wilko"
+name = "Alice"
 lampTime = 8
 totalTime = 10
+notes = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
 
 [[comedians]]
-name = "Sjoerd"
+name = "Bob"
 lampTime = 15
 totalTime = 18
+notes = "Ut pretium tempus elit congue aliquet."
 
 [[comedians]]
-name = "Jelle"
+name = "Charlie"
 lampTime = 15
 totalTime = 18
+notes = "Nunc bibendum dolor vel iaculis ultricies."
 
 [[comedians]]
-name = "Erik"
+name = "Derek"
 lampTime = 12
 totalTime = 15
+notes = "In hac habitasse platea dictumst."
 
 [[comedians]]
-name = "Pieter"
+name = "Elizabeth"
 lampTime = 19
 totalTime = 22
+notes = "Nunc ut lacinia elit. Maecenas consectetur tempor erat, eu pharetra lorem mattis sit amet."
+
+[colors.timer]
+r = 0
+g = 128
+b = 255
+
+[colors.current]
+r = 128
+g = 0
+b = 255

@@ -1,22 +1,22 @@
 package me.koendev.comedytui
 
-import de.thelooter.toml.Toml
-import java.awt.Color
-import java.io.File
-
-data class Comedian(val name: String, val lampTime: Double, val totalTime: Double)
-private data class Config(val mc: Comedian, val comedians: List<Comedian>)
-
-lateinit var comedians: List<Comedian>
+import me.koendev.comedytui.components.CurrentComedian
+import me.koendev.comedytui.components.Timer
 
 fun main() {
-    val toml = Toml().read(File("config.toml")).to(Config::class.java)
-    comedians = toml.comedians.fold(listOf(toml.mc)) { acc, curr -> acc + listOf(curr, toml.mc) }
-
     val tui = TUI()
-    Timer(tui, 1, 1)
+    val timer = Timer(tui, 1, 1)
+    val currentComedian = CurrentComedian(tui, 1, 13)
+    val stateMachine = StateMachine(timer, currentComedian)
 
-    Thread.sleep(100100)
+    currentComedian.write(config.comedians[3])
+
+    /*while (stateMachine.state != StateMachineState.CLOSING) {
+        Thread.sleep(5000)
+        stateMachine.nextState()
+    }*/
+
+    readln()
 
     tui.shutdown()
 }

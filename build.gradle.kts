@@ -13,7 +13,6 @@ repositories {
 dependencies {
     testImplementation(kotlin("test"))
     implementation("de.thelooter:toml4j:0.8.1")
-    implementation("com.github.lalyos:jfiglet:0.0.9")
     implementation(files("../Utils-latest.jar"))
 }
 
