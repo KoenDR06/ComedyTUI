@@ -1,0 +1,24 @@
+[mc]
+name = "Wilko"
+lampTime = 8
+totalTime = 10
+
+[[comedians]]
+name = "Sjoerd"
+lampTime = 15
+totalTime = 18
+
+[[comedians]]
+name = "Jelle"
+lampTime = 15
+totalTime = 18
+
+[[comedians]]
+name = "Erik"
+lampTime = 12
+totalTime = 15
+
+[[comedians]]
+name = "Pieter"
+lampTime = 19
+totalTime = 22
