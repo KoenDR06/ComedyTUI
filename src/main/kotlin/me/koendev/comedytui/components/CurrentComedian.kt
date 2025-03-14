@@ -13,7 +13,7 @@ class CurrentComedian(private val tui: TUI, private val x: Int, private val y: I
 
     fun write(comedian: Comedian) {
         // Name
-        val str = FigletFont.convertOneLine("classpath:starwars.flf", comedian.name)
+        val str = FigletFont.convertOneLine("starwars.flf", comedian.name)
             .split('\n')
             .filter { it.trim().isNotEmpty() }
             .joinToString("\n") { it.padEnd(96, ' ').substring(0..95) }

@@ -36,7 +36,7 @@ class Timer(private val tui: TUI, private val x: Int, private val y: Int) {
 
         val str = if (minutes == 0) seconds.toString() else if (seconds == 0) "${minutes}m" else "${minutes}m ${seconds}s"
 
-        val out = FigletFont.convertOneLine("classpath:univers.flf", str)
+        val out = FigletFont.convertOneLine("univers.flf", str)
             .split('\n')
             .filter { it.trim().isNotEmpty() }
 
