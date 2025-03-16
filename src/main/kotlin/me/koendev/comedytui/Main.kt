@@ -23,6 +23,6 @@ fun main(args: Array<String>) {
         }
     }
 
-    tui.shutdown()
     Runtime.getRuntime().exec(arrayOf("/bin/sh", "-c", "stty -raw </dev/tty"))
+    tui.shutdown()
 }
