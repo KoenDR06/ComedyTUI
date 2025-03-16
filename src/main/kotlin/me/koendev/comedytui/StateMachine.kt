@@ -23,6 +23,7 @@ class StateMachine(private val timer: Timer, private val currentComedian: Curren
         when (state) {
             StateMachineState.BUILDING -> {
                 state = StateMachineState.OPENING
+                currentComedian.write("Opening")
             }
             StateMachineState.OPENING -> {
                 state = StateMachineState.MC
@@ -36,6 +37,7 @@ class StateMachine(private val timer: Timer, private val currentComedian: Curren
                     state = StateMachineState.BREAK
                     onStage = null
                     beforeBreak = false
+                    currentComedian.write("Break")
                 } else if (comedianIndex < config.comedians.size) {
                     timer.loop(onStage!!.name)
                     state = StateMachineState.COMEDIAN
@@ -45,7 +47,7 @@ class StateMachine(private val timer: Timer, private val currentComedian: Curren
                     state = StateMachineState.CLOSING
                     timer.loop(onStage!!.name)
                     onStage = null
-                    timer.showStats()
+                    currentComedian.write("Done", timer.getStats())
                 }
             }
             StateMachineState.COMEDIAN -> {

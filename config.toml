@@ -1,31 +1,31 @@
 breakIndex = 2
 
 [mc]
-name = "Alice"
+name = "M of C"
 lampTime = 8
 totalTime = 10
 notes = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
 
 [[comedians]]
-name = "Bob"
+name = "Comedian 1"
 lampTime = 15
 totalTime = 18
 notes = "Ut pretium tempus elit congue aliquet."
 
 [[comedians]]
-name = "Charlie"
+name = "Comedian 2"
 lampTime = 15
 totalTime = 18
 notes = "Nunc bibendum dolor vel iaculis ultricies."
 
 [[comedians]]
-name = "Derek"
+name = "Comedian 3"
 lampTime = 12
 totalTime = 15
 notes = "In hac habitasse platea dictumst."
 
 [[comedians]]
-name = "Elizabeth"
+name = "Comedian 4"
 lampTime = 19
 totalTime = 22
 notes = "Nunc ut lacinia elit. Maecenas consectetur tempor erat, eu pharetra lorem mattis sit amet."

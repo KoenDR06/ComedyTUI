@@ -1,12 +1,10 @@
 package me.koendev.comedytui.components
 
 import com.github.lalyos.jfiglet.FigletFont
-import me.koendev.comedytui.CUL
-import me.koendev.comedytui.CUR
 import me.koendev.comedytui.TUI
 import me.koendev.comedytui.config
-import java.io.File
 import kotlin.concurrent.thread
+import java.time.LocalTime
 
 class Timer(private val tui: TUI, private val x: Int, private val y: Int) {
     private var t = 0
@@ -17,26 +15,47 @@ class Timer(private val tui: TUI, private val x: Int, private val y: Int) {
     private val color = config.colors.timer.toColor()
 
     init {
-        tui.drawBox(x, y, 100, 12, color)
-        tui.write(x+2, y, "$CUR Timer $CUL", color)
+        tui.drawBox(x, y, 100, 12, color, header="Timer")
         tui.write(x+3, x+2, this.timeToString(0))
 
         thread(isDaemon = true) {
-            while (waiting) {Thread.sleep(10)}
+            // Show the irl time before the show
+            while (waiting) {
+                tui.write(x+3, y+2, this.timeToString(LocalTime.now().toSecondOfDay(), true))
+                Thread.sleep(100)
+            }
+
+            // Show the stopwatch time during the show
             while (runTimer) {
                 tui.write(x+3, y+2, this.timeToString(t++))
                 Thread.sleep(1000)
             }
+
+            // Show the irl time after the show
+            while (true) {
+                tui.write(x+3, y+2, this.timeToString(LocalTime.now().toSecondOfDay(), true))
+                Thread.sleep(100)
+            }
         }
     }
 
-    private fun timeToString(t: Int): String {
-        val seconds = t % 60
-        val minutes = t / 60
+    private fun timeToString(t: Int, realTime: Boolean = false): String {
+        val str: String
 
-        val str = if (minutes == 0) seconds.toString() else if (seconds == 0) "${minutes}m" else "${minutes}m ${seconds}s"
+        if (!realTime) {
+            val seconds = t % 60
+            val minutes = t / 60
+            str = if (minutes == 0) seconds.toString() else if (seconds == 0) "${minutes}m" else "${minutes}m ${seconds}s"
+        } else {
+            val h = t / 3600
+            val m = (t - (h * 3600)) / 60
 
-        val out = FigletFont.convertOneLine("classpath:univers.flf", str)
+            str = "$h : $m"
+        }
+
+
+
+        val out = FigletFont.convertOneLine("univers.flf", str)
             .split('\n')
             .filter { it.trim().isNotEmpty() }
 
@@ -45,11 +64,23 @@ class Timer(private val tui: TUI, private val x: Int, private val y: Int) {
         return out.joinToString("\n") { (" ".repeat((96 - maxLine) / 2) + it).padEnd(96, ' ') }
     }
 
-    fun showStats() {
+    fun getStats(): String {
         runTimer = false
-        tui.write(x+3, y+2, List(8) { " ".repeat(98) }.joinToString("\n"))
-        tui.write(x+3, y+1, stats.joinToString("\n"))
+        tui.clearBox(x+1,y+1,98, 10)
+
+        var str = "Time      Name\n\n"
+
+        for ((name, time) in stats) {
+            val seconds = time % 60
+            val minutes = time / 60
+            val timeStr = "${minutes.toString().padStart(2, '0')}m ${seconds.toString().padStart(2, '0')}s"
+
+            str += timeStr.padEnd(10) + name + "\n"
+        }
+
+        return str
     }
+
 
     fun start() { waiting = false }
 

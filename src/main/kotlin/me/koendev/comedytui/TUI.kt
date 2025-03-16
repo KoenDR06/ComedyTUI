@@ -9,11 +9,8 @@ const val CUR = '╗'
 const val CDL = '╚'
 const val CDR = '╝'
 
-class TUI {
+class TUI(val width: Int, val height: Int) {
     init { print("\u001b[H\u001B[3J\u001b[?25l") }
-
-    val width = 282 // Placeholder
-    val height = 79 // Placeholder
 
     private fun moveCursor(x: Int, y: Int) = "\u001b[$y;${x}H"
 
@@ -23,7 +20,7 @@ class TUI {
 
     fun shutdown() = print(resetColor()+"\u001b[H\u001B[3J\u001b[?25h")
 
-    fun drawBox(x: Int, y: Int, w: Int, h: Int, foreColor: Color? = null, backColor: Color? = null) {
+    fun drawBox(x: Int, y: Int, w: Int, h: Int, foreColor: Color? = null, backColor: Color? = null, header: String? = null) {
         if (x < 1 || x-1+w > width || y < 1 || y-1+h > height ) throw Exception("Box falls (partly) out of bounds")
 
         var str = (if (foreColor != null) setForegroundColor(foreColor) else "") +
@@ -39,15 +36,23 @@ class TUI {
         str += moveCursor(x, y + h - 1) + CDL + HOR.toString().repeat(w-2) + CDR
 
         print(str + resetColor())
+
+        write(x+2, y, "$CUR $header $CUL", foreColor)
+    }
+
+    fun clearBox(x: Int, y: Int, w: Int, h: Int) {
+        if (x < 1 || x-1+w > width || y < 1 || y-1+h > height ) throw Exception("Box falls (partly) out of bounds")
+
+        write(x, y, List(h) { " ".repeat(w) }.joinToString("\n"))
     }
 
     fun write(x: Int, y: Int, str: String, foreColor: Color? = null, backColor: Color? = null) {
         var output =
-                (if (foreColor != null) setForegroundColor(foreColor) else "") +
-                (if (backColor != null) setForegroundColor(backColor) else "") +
-                moveCursor(x, y)
+            (if (foreColor != null) setForegroundColor(foreColor) else "") +
+            (if (backColor != null) setForegroundColor(backColor) else "") +
+            moveCursor(x, y)
 
-                for ((i, line) in str.split('\n').withIndex()) {
+        for ((i, line) in str.split('\n').withIndex()) {
             output += line + moveCursor(x, y+i+1)
         }
         print(output + resetColor())
