@@ -3,20 +3,26 @@ package me.koendev.comedytui
 import me.koendev.comedytui.components.CurrentComedian
 import me.koendev.comedytui.components.Timer
 
-fun main() {
-    val tui = TUI()
+fun main(args: Array<String>) {
+    Runtime.getRuntime().exec(arrayOf("/bin/sh", "-c", "stty raw </dev/tty"))
+
+    val tui = TUI(args[1].toInt(), args[0].toInt())
     val timer = Timer(tui, 1, 1)
     val currentComedian = CurrentComedian(tui, 1, 13)
     val stateMachine = StateMachine(timer, currentComedian)
 
-    currentComedian.write(config.comedians[3])
+    currentComedian.write("Building")
 
-    /*while (stateMachine.state != StateMachineState.CLOSING) {
-        Thread.sleep(5000)
-        stateMachine.nextState()
-    }*/
-
-    readln()
+    while (true) {
+        val char = System.`in`.read().toChar()
+        print("\b")
+        when (char) {
+            'q' -> break
+            'n' -> stateMachine.nextState()
+            else -> {}
+        }
+    }
 
     tui.shutdown()
+    Runtime.getRuntime().exec(arrayOf("/bin/sh", "-c", "stty -raw </dev/tty"))
 }
