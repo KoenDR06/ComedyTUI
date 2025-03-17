@@ -3,11 +3,11 @@ package me.koendev.comedytui.components
 import com.github.lalyos.jfiglet.FigletFont
 import me.koendev.comedytui.TUI
 import me.koendev.comedytui.config
-import kotlin.concurrent.thread
 import java.time.LocalTime
+import kotlin.concurrent.thread
 
 class Timer(private val tui: TUI, private val x: Int, private val y: Int) {
-    private var t = 0
+    private var startTimestamp = System.currentTimeMillis()
     private var runTimer = true
     private var waiting = true
     private val stats = mutableListOf<Pair<String, Int>>()
@@ -27,8 +27,8 @@ class Timer(private val tui: TUI, private val x: Int, private val y: Int) {
 
             // Show the stopwatch time during the show
             while (runTimer) {
-                tui.write(x+3, y+2, this.timeToString(t++))
-                Thread.sleep(1000)
+                tui.write(x+3, y+2, this.timeToString(((System.currentTimeMillis() - startTimestamp)/1000).toInt()))
+                Thread.sleep(100)
             }
 
             // Show the irl time after the show
@@ -49,8 +49,9 @@ class Timer(private val tui: TUI, private val x: Int, private val y: Int) {
         } else {
             val h = t / 3600
             val m = (t - (h * 3600)) / 60
+            val s = t % 60
 
-            str = "$h : $m"
+            str = "${h.toString().padStart(2, '0')}: ${m.toString().padStart(2, '0')}: ${s.toString().padStart(2, '0')}"
         }
 
         val out = FigletFont.convertOneLine("univers.flf", str)
@@ -58,6 +59,8 @@ class Timer(private val tui: TUI, private val x: Int, private val y: Int) {
             .filter { it.trim().isNotEmpty() }
 
         val maxLine = out.maxOf { it.length }
+
+        if (maxLine > 96) return listOf("","","","",str,"","","").joinToString("\n") { (" ".repeat((96 - str.length ) / 2) + it).padEnd(96, ' ') }
 
         return out.joinToString("\n") { (" ".repeat((96 - maxLine) / 2) + it).padEnd(96, ' ') }
     }
@@ -83,10 +86,10 @@ class Timer(private val tui: TUI, private val x: Int, private val y: Int) {
     fun start() { waiting = false }
 
     fun loop(loopName: String) {
-        val loopTime = t
+        val loopTime = (System.currentTimeMillis() - startTimestamp) / 1000
 
-        stats.add(Pair(loopName, loopTime))
+        stats.add(Pair(loopName, loopTime.toInt()))
 
-        t = 0
+        startTimestamp = System.currentTimeMillis()
     }
 }
