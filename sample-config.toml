@@ -1,0 +1,42 @@
+breakIndex = 2
+
+[mc]
+name = ""
+lampTime = 8
+totalTime = 10
+notes = ""
+
+[[comedians]]
+name = ""
+lampTime = 15
+totalTime = 18
+notes = ""
+
+[[comedians]]
+name = ""
+lampTime = 15
+totalTime = 18
+notes = ""
+
+[[comedians]]
+name = ""
+lampTime = 10
+totalTime = 12
+notes = ""
+
+[[comedians]]
+name = ""
+lampTime = 10
+totalTime = 12
+notes = ""
+
+[[comedians]]
+name = ""
+lampTime = 14
+totalTime = 18
+notes = ""
+
+# --- Look and Feel ---
+[colors]
+timer = { r=0, g=128, b=255 }
+current = { r = 128, g = 0, b = 255 }
