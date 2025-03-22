@@ -7,7 +7,7 @@ import java.time.LocalTime
 import kotlin.concurrent.thread
 
 class Timer(private val tui: TUI, private val x: Int, private val y: Int) {
-    private var startTimestamp = System.currentTimeMillis()
+    private var startTimestamp = 0L
     private var runTimer = true
     private var waiting = true
     private val stats = mutableListOf<Pair<String, Int>>()
@@ -83,7 +83,10 @@ class Timer(private val tui: TUI, private val x: Int, private val y: Int) {
     }
 
 
-    fun start() { waiting = false }
+    fun start() {
+        waiting = false
+        startTimestamp = System.currentTimeMillis()
+    }
 
     fun loop(loopName: String) {
         val loopTime = (System.currentTimeMillis() - startTimestamp) / 1000
