@@ -3,13 +3,15 @@ package me.koendev.comedytui
 import me.koendev.comedytui.components.CurrentComedian
 import me.koendev.comedytui.components.Timer
 
+lateinit var stateMachine: StateMachine
+
 fun main(args: Array<String>) {
     Runtime.getRuntime().exec(arrayOf("/bin/sh", "-c", "stty raw </dev/tty"))
 
     val tui = TUI(args[1].toInt(), args[0].toInt())
     val timer = Timer(tui, 1, 1)
     val currentComedian = CurrentComedian(tui, 1, 13)
-    val stateMachine = StateMachine(timer, currentComedian)
+    stateMachine = StateMachine(timer, currentComedian)
 
     currentComedian.write("Building")
 
@@ -19,6 +21,7 @@ fun main(args: Array<String>) {
         when (char) {
             'q' -> break
             'n' -> stateMachine.nextState()
+            'd' -> timer.stopFlashing()
             else -> {}
         }
     }

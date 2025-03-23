@@ -3,6 +3,8 @@ package me.koendev.comedytui.components
 import com.github.lalyos.jfiglet.FigletFont
 import me.koendev.comedytui.TUI
 import me.koendev.comedytui.config
+import me.koendev.comedytui.stateMachine
+import java.awt.Color
 import java.time.LocalTime
 import kotlin.concurrent.thread
 
@@ -10,6 +12,8 @@ class Timer(private val tui: TUI, private val x: Int, private val y: Int) {
     private var startTimestamp = 0L
     private var runTimer = true
     private var waiting = true
+    private var flashing = true
+
     private val stats = mutableListOf<Pair<String, Int>>()
 
     private val color = config.colors.timer.toColor()
@@ -21,19 +25,38 @@ class Timer(private val tui: TUI, private val x: Int, private val y: Int) {
         thread(isDaemon = true) {
             // Show the irl time before the show
             while (waiting) {
-                tui.write(x+3, y+2, this.timeToString(LocalTime.now().toSecondOfDay(), true))
+                tui.write(x+2, y+2, this.timeToString(LocalTime.now().toSecondOfDay(), true))
                 Thread.sleep(100)
             }
 
             // Show the stopwatch time during the show
             while (runTimer) {
-                tui.write(x+3, y+2, this.timeToString(((System.currentTimeMillis() - startTimestamp)/1000).toInt()))
+                val millisElapsed = System.currentTimeMillis() - startTimestamp
+                val secondsElapsed = millisElapsed / 100
+
+                var foreColor: Color
+                var backColor: Color
+
+                if (stateMachine.onStage == null) {
+                    foreColor = Color.WHITE
+                    backColor = Color.BLACK
+                } else if (secondsElapsed > stateMachine.onStage!!.lampTime*60 && flashing) {
+                    foreColor = if (millisElapsed % 1000 < 200) Color.BLACK else Color.WHITE
+                    backColor = if (millisElapsed % 1000 < 200) Color.WHITE else Color.BLACK
+                } else {
+                    foreColor = Color.WHITE
+                    backColor = Color.BLACK
+
+                    flashing = flashing || secondsElapsed < stateMachine.onStage!!.lampTime*60
+                }
+
+                tui.write(x+2, y+2, this.timeToString(secondsElapsed.toInt()), foreColor, backColor)
                 Thread.sleep(100)
             }
 
             // Show the irl time after the show
             while (true) {
-                tui.write(x+3, y+2, this.timeToString(LocalTime.now().toSecondOfDay(), true))
+                tui.write(x+2, y+2, this.timeToString(LocalTime.now().toSecondOfDay(), true))
                 Thread.sleep(100)
             }
         }
@@ -86,6 +109,7 @@ class Timer(private val tui: TUI, private val x: Int, private val y: Int) {
     fun start() {
         waiting = false
         startTimestamp = System.currentTimeMillis()
+        flashing = true
     }
 
     fun loop(loopName: String) {
@@ -94,5 +118,9 @@ class Timer(private val tui: TUI, private val x: Int, private val y: Int) {
         stats.add(Pair(loopName, loopTime.toInt()))
 
         startTimestamp = System.currentTimeMillis()
+    }
+
+    fun stopFlashing() {
+        flashing = false
     }
 }

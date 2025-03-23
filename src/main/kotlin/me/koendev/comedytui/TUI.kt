@@ -24,7 +24,7 @@ class TUI(val width: Int, val height: Int) {
         if (x < 1 || x-1+w > width || y < 1 || y-1+h > height ) throw Exception("Box falls (partly) out of bounds")
 
         var str = (if (foreColor != null) setForegroundColor(foreColor) else "") +
-                  (if (backColor != null) setForegroundColor(backColor) else "") +
+                  (if (backColor != null) setBackgroundColor(backColor) else "") +
                   moveCursor(x, y) +
                   CUL + HOR.toString().repeat(w-2) + CUR
 
@@ -49,7 +49,7 @@ class TUI(val width: Int, val height: Int) {
     fun write(x: Int, y: Int, str: String, foreColor: Color? = null, backColor: Color? = null) {
         var output =
             (if (foreColor != null) setForegroundColor(foreColor) else "") +
-            (if (backColor != null) setForegroundColor(backColor) else "") +
+            (if (backColor != null) setBackgroundColor(backColor) else "") +
             moveCursor(x, y)
 
         for ((i, line) in str.split('\n').withIndex()) {
