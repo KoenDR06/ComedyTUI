@@ -16,6 +16,7 @@ class Timer(private val tui: TUI, private val x: Int, private val y: Int) {
 
     private val stats = mutableListOf<Pair<String, Int>>()
 
+    private val figlet = FigletFont(Thread.currentThread().contextClassLoader.getResourceAsStream("univers.flf"))
     private val color = config.colors.timer.toColor()
 
     init {
@@ -77,7 +78,7 @@ class Timer(private val tui: TUI, private val x: Int, private val y: Int) {
             str = "${h.toString().padStart(2, '0')}: ${m.toString().padStart(2, '0')}: ${s.toString().padStart(2, '0')}"
         }
 
-        val out = FigletFont.convertOneLine("univers.flf", str)
+        val out = figlet.convert(str)
             .split('\n')
             .filter { it.trim().isNotEmpty() }
 

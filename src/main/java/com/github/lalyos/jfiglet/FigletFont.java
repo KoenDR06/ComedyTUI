@@ -24,7 +24,7 @@ public class FigletFont {
   }
 
   public FigletFont(InputStream stream) throws IOException {
-    font = new char[MAX_CHARS][][];
+      font = new char[MAX_CHARS][][];
 
       String dummyS;
       int commentLines;
@@ -113,7 +113,6 @@ public class FigletFont {
     }
   }
 
-
   public String convert(String message) {
     char[][] convertedMessage = Smushing.convert(this, message);
     StringBuilder result = new StringBuilder();
@@ -122,13 +121,5 @@ public class FigletFont {
       result.append('\n');
     }
     return result.toString().replace(hardblank, ' ');
-  }
-
-  public static String convertOneLine(InputStream fontFileStream, String message) throws IOException {
-    return new FigletFont(fontFileStream).convert(message);
-  }
-
-  public static String convertOneLine(String resourcePath, String message) throws IOException {
-    return convertOneLine(Thread.currentThread().getContextClassLoader().getResourceAsStream(resourcePath), message);
   }
 }

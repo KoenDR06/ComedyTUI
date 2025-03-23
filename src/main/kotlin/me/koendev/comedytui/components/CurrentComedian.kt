@@ -8,6 +8,7 @@ class CurrentComedian(private val tui: TUI, private val x: Int, private val y: I
     private val h = tui.height-y+1
 
     private val color = config.colors.current.toColor()
+    private val figlet = FigletFont(Thread.currentThread().contextClassLoader.getResourceAsStream("starwars.flf"))
 
     init {
         tui.drawBox(x, y, 100, tui.height-y+1, color, header="Current comedian")
@@ -15,7 +16,7 @@ class CurrentComedian(private val tui: TUI, private val x: Int, private val y: I
 
     fun write(comedian: Comedian) {
         // Name
-        val str = FigletFont.convertOneLine("starwars.flf", comedian.name)
+        val str = figlet.convert(comedian.name)
             .split('\n')
             .filter { it.trim().isNotEmpty() }
             .joinToString("\n") { it.padEnd(96, ' ').substring(0..95) }
@@ -36,7 +37,7 @@ class CurrentComedian(private val tui: TUI, private val x: Int, private val y: I
     }
 
     fun write(header: String, notes: String = "") {
-        val str = FigletFont.convertOneLine("starwars.flf", header)
+        val str = figlet.convert(header)
             .split('\n')
             .filter { it.trim().isNotEmpty() }
             .joinToString("\n") { it.padEnd(96, ' ').substring(0..95) }
