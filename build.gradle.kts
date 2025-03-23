@@ -13,6 +13,9 @@ repositories {
 dependencies {
     testImplementation(kotlin("test"))
     implementation("de.thelooter:toml4j:0.8.1")
+
+    implementation("org.openjfx:javafx-controls:25-ea+8")
+
     implementation(files("../Utils-latest.jar"))
 }
 
