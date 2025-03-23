@@ -17,7 +17,7 @@ fun main(args: Array<String>) {
 
     while (true) {
         val char = System.`in`.read().toChar()
-        print("\b")
+        print('\b')
         when (char) {
             'q' -> break
             'n' -> stateMachine.nextState()

@@ -62,7 +62,7 @@ class StateMachine(private val timer: Timer, private val currentComedian: Curren
                 onStage = config.mc
                 currentComedian.write(onStage!!)
             }
-            StateMachineState.CLOSING -> { // TODO Make the application close here?
+            StateMachineState.CLOSING -> {
                 StateMachineState.CLOSING
             }
         }

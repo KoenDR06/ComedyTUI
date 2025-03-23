@@ -33,7 +33,7 @@ class Timer(private val tui: TUI, private val x: Int, private val y: Int) {
             // Show the stopwatch time during the show
             while (runTimer) {
                 val millisElapsed = System.currentTimeMillis() - startTimestamp
-                val secondsElapsed = millisElapsed / 100
+                val secondsElapsed = millisElapsed / 1000
 
                 var foreColor: Color
                 var backColor: Color
@@ -75,7 +75,7 @@ class Timer(private val tui: TUI, private val x: Int, private val y: Int) {
             val m = (t - (h * 3600)) / 60
             val s = t % 60
 
-            str = "${h.toString().padStart(2, '0')}: ${m.toString().padStart(2, '0')}: ${s.toString().padStart(2, '0')}"
+            str = "$h ${m.toString().padStart(2, '0')} ${s.toString().padStart(2, '0')}"
         }
 
         val out = figlet.convert(str)
