@@ -1,12 +1,21 @@
 package me.koendev.comedytui
 
-import me.koendev.comedytui.components.music.Music
+import me.koendev.comedytui.components.music.impl.WavMusic
+import java.io.File
 
 lateinit var stateMachine: StateMachine
 
 fun main(args: Array<String>) {
-    val music = Music()
+    val music = WavMusic(File("audio/moveOnUp.wav"))
 
+    music.play()
+    Thread.sleep(1000)
+    music.rewind()
+    Thread.sleep(1000)
+    music.play()
+
+    music.chooseSong("audio/boogieWonderland.wav")
+    music.play()
     Thread.sleep(10000)
 
     /*Runtime.getRuntime().exec(arrayOf("/bin/sh", "-c", "stty raw </dev/tty"))
