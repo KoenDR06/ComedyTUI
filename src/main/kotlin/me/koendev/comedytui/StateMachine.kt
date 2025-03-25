@@ -2,6 +2,7 @@ package me.koendev.comedytui
 
 import me.koendev.comedytui.components.CurrentComedian
 import me.koendev.comedytui.components.Timer
+import me.koendev.comedytui.components.music.MusicProvider
 
 enum class StateMachineState {
     BUILDING,
@@ -12,7 +13,7 @@ enum class StateMachineState {
     CLOSING
 }
 
-class StateMachine(private val timer: Timer, private val currentComedian: CurrentComedian) {
+class StateMachine(private val timer: Timer, private val currentComedian: CurrentComedian, private val musicProvider: MusicProvider) {
     var state = StateMachineState.BUILDING
     var onStage: Comedian? = null
 
@@ -30,10 +31,11 @@ class StateMachine(private val timer: Timer, private val currentComedian: Curren
                 onStage = config.mc
                 currentComedian.write(onStage!!)
                 timer.start()
+                musicProvider.play("audio/intro.wav")
             }
             StateMachineState.MC -> {
                 if (comedianIndex == config.breakIndex && beforeBreak) {
-                    timer.loop(onStage!!.name)
+                    timer.loop(onStage!!.name, false)
                     state = StateMachineState.BREAK
                     onStage = null
                     beforeBreak = false

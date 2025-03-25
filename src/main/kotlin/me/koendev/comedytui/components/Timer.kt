@@ -109,16 +109,16 @@ class Timer(private val tui: TUI, private val x: Int, private val y: Int) {
 
     fun start() {
         waiting = false
-        startTimestamp = System.currentTimeMillis()
+        startTimestamp = System.currentTimeMillis() + config.musicTime*1000
         flashing = true
     }
 
-    fun loop(loopName: String) {
+    fun loop(loopName: String, wait: Boolean = true) {
         val loopTime = (System.currentTimeMillis() - startTimestamp) / 1000
 
         stats.add(Pair(loopName, loopTime.toInt()))
 
-        startTimestamp = System.currentTimeMillis()
+        startTimestamp = System.currentTimeMillis() + if (wait) config.musicTime*1000 else 0
     }
 
     fun stopFlashing() {

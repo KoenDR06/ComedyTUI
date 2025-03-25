@@ -21,14 +21,16 @@ data class TOMLColor(
 
 data class Colors(
     val timer: TOMLColor,
-    val current: TOMLColor
+    val current: TOMLColor,
+    val music: TOMLColor
 )
 
 data class Config(
     val mc: Comedian,
     val comedians: List<Comedian>,
     val breakIndex: Int,
-    val colors: Colors
+    val colors: Colors,
+    val musicTime: Int
 )
 
 val config: Config = Toml().read(File("config.toml")).to(Config::class.java)
