@@ -38,5 +38,6 @@ notes = ""
 
 # --- Look and Feel ---
 [colors]
-timer = { r=0, g=128, b=255 }
-current = { r = 128, g = 0, b = 255 }
+timer   = { r=  0, g=128, b=255 }
+current = { r=128, g=  0, b=255 }
+music   = { r=  0, g=  0, b=255 }
