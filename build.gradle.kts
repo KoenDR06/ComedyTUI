@@ -13,7 +13,7 @@ repositories {
 dependencies {
     testImplementation(kotlin("test"))
     implementation("de.thelooter:toml4j:0.8.1")
-    implementation(files("../Utils-latest.jar"))
+    implementation(files("../Utils-latest.jar", "TUIMaker-1.0-SNAPSHOT.jar"))
 }
 
 tasks.test {

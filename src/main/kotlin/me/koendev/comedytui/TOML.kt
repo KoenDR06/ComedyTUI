@@ -21,7 +21,8 @@ data class TOMLColor(
 
 data class Colors(
     val timer: TOMLColor,
-    val current: TOMLColor
+    val current: TOMLColor,
+    val music: TOMLColor
 )
 
 data class Config(

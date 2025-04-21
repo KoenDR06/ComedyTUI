@@ -1,14 +1,21 @@
 package me.koendev.comedytui.components
 
 import com.github.lalyos.jfiglet.FigletFont
-import me.koendev.comedytui.TUI
 import me.koendev.comedytui.config
 import me.koendev.comedytui.stateMachine
+import me.koendev.tuimaker.TUI
+import me.koendev.tuimaker.borders.RoundedSingleBorder
+import me.koendev.tuimaker.elements.Box
 import java.awt.Color
 import java.time.LocalTime
 import kotlin.concurrent.thread
 
-class Timer(private val tui: TUI, private val x: Int, private val y: Int) {
+class Timer(tui: TUI) {
+    private val x = 1
+    private val y = 1
+    private val width = 103
+    private val height = 12
+
     private var startTimestamp = 0L
     private var runTimer = true
     private var waiting = true
@@ -19,14 +26,15 @@ class Timer(private val tui: TUI, private val x: Int, private val y: Int) {
     private val figlet = FigletFont(Thread.currentThread().contextClassLoader.getResourceAsStream("univers.flf"))
     private val color = config.colors.timer.toColor()
 
+    val box = Box(tui, x, y, width, height, RoundedSingleBorder(), borderColor = color, "Timer", padding = Pair(0,1))
+
     init {
-        tui.drawBox(x, y, 100, 12, color, header="Timer")
-        tui.write(x+3, x+2, this.timeToString(0))
+        box.content = timeToString(0)
 
         thread(isDaemon = true) {
             // Show the irl time before the show
             while (waiting) {
-                tui.write(x+2, y+2, this.timeToString(LocalTime.now().toSecondOfDay(), true))
+                box.content = timeToString(LocalTime.now().toSecondOfDay(), true)
                 Thread.sleep(100)
             }
 
@@ -51,13 +59,16 @@ class Timer(private val tui: TUI, private val x: Int, private val y: Int) {
                     flashing = flashing || secondsElapsed < stateMachine.onStage!!.lampTime*60
                 }
 
-                tui.write(x+2, y+2, this.timeToString(secondsElapsed.toInt()), foreColor, backColor)
+                box.foreColor = foreColor
+                box.backColor = backColor
+                box.content = timeToString(secondsElapsed.toInt())
+
                 Thread.sleep(100)
             }
 
             // Show the irl time after the show
             while (true) {
-                tui.write(x+2, y+2, this.timeToString(LocalTime.now().toSecondOfDay(), true))
+                box.content = timeToString(LocalTime.now().toSecondOfDay(), true)
                 Thread.sleep(100)
             }
         }
@@ -75,7 +86,7 @@ class Timer(private val tui: TUI, private val x: Int, private val y: Int) {
             val m = (t - (h * 3600)) / 60
             val s = t % 60
 
-            str = "$h ${m.toString().padStart(2, '0')} ${s.toString().padStart(2, '0')}"
+            str = "${h.toString().padStart(2, '0')} ${m.toString().padStart(2, '0')} ${s.toString().padStart(2, '0')}"
         }
 
         val out = figlet.convert(str)
@@ -84,14 +95,15 @@ class Timer(private val tui: TUI, private val x: Int, private val y: Int) {
 
         val maxLine = out.maxOf { it.length }
 
-        if (maxLine > 96) return listOf("","","","",str,"","","").joinToString("\n") { (" ".repeat((96 - str.length ) / 2) + it).padEnd(96, ' ') }
+        val innerWidth = width-2*box.padding.first-2
 
-        return out.joinToString("\n") { (" ".repeat((96 - maxLine) / 2) + it).padEnd(96, ' ') }
+        if (maxLine > innerWidth) throw Exception() //return listOf("","","","",str,"","","").joinToString("\n") { (" ".repeat((96 - str.length ) / 2) + it).padEnd(96, ' ') }
+
+        return out.joinToString("\n") { (" ".repeat((innerWidth - maxLine) / 2) + it) }
     }
 
     fun getStats(): String {
         runTimer = false
-        tui.clearBox(x+1,y+1,98, 10)
 
         var str = "Time      Name\n\n"
 
