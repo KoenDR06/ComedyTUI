@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "me.koendev.comedytui"
-version = "0.0.0"
+version = "1.0.0"
 
 repositories {
     mavenCentral()
@@ -13,7 +13,7 @@ repositories {
 dependencies {
     testImplementation(kotlin("test"))
     implementation("de.thelooter:toml4j:0.8.1")
-    implementation(files("../Utils-latest.jar", "TUIMaker-1.0-SNAPSHOT.jar"))
+    implementation(files("../Utils-latest.jar", "TUIMaker-0.0.0.jar"))
 }
 
 tasks.test {

@@ -25,11 +25,12 @@ fun main(args: Array<String>) {
             'q' -> throw CloseException()
             'n' -> stateMachine.nextState()
             'd' -> timer.stopFlashing()
+            'p' -> music.pause()
             else -> {}
         }
     }
 
-    currentComedian.write("Building")
+    currentComedian.write("Pre - Show")
     stateMachine = StateMachine(timer, currentComedian, music)
 
     try {

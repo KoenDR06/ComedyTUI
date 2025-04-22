@@ -25,6 +25,8 @@ class StateMachine(private val timer: Timer, private val currentComedian: Curren
             StateMachineState.BUILDING -> {
                 state = StateMachineState.OPENING
                 currentComedian.write("Opening")
+                music.next()
+                music.play()
             }
             StateMachineState.OPENING -> {
                 state = StateMachineState.MC
@@ -34,21 +36,25 @@ class StateMachine(private val timer: Timer, private val currentComedian: Curren
             }
             StateMachineState.MC -> {
                 if (comedianIndex == config.breakIndex && beforeBreak) {
-                    timer.loop(onStage!!.name)
+                    timer.loop(onStage!!.name, 0)
                     state = StateMachineState.BREAK
                     onStage = null
                     beforeBreak = false
                     currentComedian.write("Break")
+                    music.play()
                 } else if (comedianIndex < config.comedians.size) {
                     timer.loop(onStage!!.name)
                     state = StateMachineState.COMEDIAN
                     onStage = config.comedians[comedianIndex++]
                     currentComedian.write(onStage!!)
+                    music.rewind()
+                    music.play()
                 } else {
                     state = StateMachineState.CLOSING
                     timer.loop(onStage!!.name)
                     onStage = null
                     currentComedian.write("Done", timer.getStats())
+                    music.play()
                 }
             }
             StateMachineState.COMEDIAN -> {
@@ -56,12 +62,17 @@ class StateMachine(private val timer: Timer, private val currentComedian: Curren
                 timer.loop(onStage!!.name)
                 onStage = config.mc
                 currentComedian.write(onStage!!)
+                music.rewind()
+                music.play()
             }
             StateMachineState.BREAK -> {
                 state = StateMachineState.MC
                 timer.loop("Break")
                 onStage = config.mc
                 currentComedian.write(onStage!!)
+
+                music.next()
+                music.play()
             }
             StateMachineState.CLOSING -> {
                 StateMachineState.CLOSING

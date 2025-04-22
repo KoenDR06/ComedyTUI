@@ -125,12 +125,12 @@ class Timer(tui: TUI) {
         flashing = true
     }
 
-    fun loop(loopName: String) {
+    fun loop(loopName: String, startTime: Int = config.musicTime) {
         val loopTime = (System.currentTimeMillis() - startTimestamp) / 1000
 
         stats.add(Pair(loopName, loopTime.toInt()))
 
-        startTimestamp = System.currentTimeMillis()
+        startTimestamp = System.currentTimeMillis() + startTime * 1000
     }
 
     fun stopFlashing() {
