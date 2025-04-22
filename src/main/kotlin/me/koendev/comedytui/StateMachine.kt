@@ -1,6 +1,7 @@
 package me.koendev.comedytui
 
 import me.koendev.comedytui.components.CurrentComedian
+import me.koendev.comedytui.components.Music
 import me.koendev.comedytui.components.Timer
 
 enum class StateMachineState {
@@ -12,7 +13,7 @@ enum class StateMachineState {
     CLOSING
 }
 
-class StateMachine(private val timer: Timer, private val currentComedian: CurrentComedian) {
+class StateMachine(private val timer: Timer, private val currentComedian: CurrentComedian, private val music: Music) {
     var state = StateMachineState.BUILDING
     var onStage: Comedian? = null
 
